@@ -4,6 +4,26 @@ from abc import ABCMeta,abstractmethod
 import os
 from functools import total_ordering, lru_cache
 
+
+class ProtectMethodsMeta(type):
+    methods = ['successful_charge', 'failed_charge']
+
+    def __new__(mcs, name, bases, attrs):
+        for method_name in mcs.methods:
+            if method_name not in attrs:
+                continue
+            method = attrs[method_name]
+            lock_key = '_wrapped_by__{}'.format(mcs.__name__)
+            if getattr(method, lock_key, None):
+                continue
+                
+            method = logged_action(method)
+            method = mutex(method)
+            setattr(method, lock_key, True)
+            attrs[method_name] = method
+        return super(ProtectMethodsMeta, mcs).__new__(mcs, name, bases, attrs)
+
+
 def add(p1, p2, take=False):
     """
     some text
