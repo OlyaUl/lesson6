@@ -25,14 +25,30 @@ def fib1(n):
 #n1 = int(input())
 #print(fib1(n1))
 
-print("--------------")
+print("........")
+
+
+class SetGet(object):
+
+    def __set__(self, instance, value):
+        instance.dummy = value
+        self.sth = 0
+        # return value
+
+    def __get__(self, instance, owner):
+        return instance.dummy
+
+
 @total_ordering
 class Bot:
+
+    property = SetGet()
+    property1 = SetGet()
 
     def __init__(self, name):
         self.name = name
 
-    def __getattr__(self,name):
+    def __getattr__(self, name):
         return "you want {}".format(name)
 
     def __str__(self):
@@ -52,8 +68,6 @@ class Bot:
     def __repr__(self):
         return self.name + str(id(self))
 
-
-
     def _say_stdout(self):
         print("My name is {self.name}".format(**locals()))
 
@@ -66,21 +80,35 @@ class Bot:
 
 myBot = Bot('test')
 myB = Bot('test123')
+bot = Bot('newtest')
+bot.property = "Something"
+bot.property1 = "Something123"
 
-#print(myBot + "rrrrrr")
-lstBot = [(Bot('test' + str(x))) for x in range(1,5)]# [Bot("t1") *2]
-lstBot1 = []
-print(lstBot)
-print(sorted(lstBot))
-print("----")
-print(lstBot.sort(reverse=True))
-print(lstBot)
+print(bot.property)
+print(bot.property1)
 
-print(myBot == myB)
-print(myBot != myB)
+bot.__dict__['property'] = 'a property'
+print(vars(Bot))
+# print (Bot.property.dummy = bot.property)
 
-print(myBot > myB)
-print(myBot <= myB)
+# print(myBot + "rrrrrr")
+# lstBot = [(Bot('test' + str(x))) for x in range(1,5)]# [Bot("t1") *2]
+# lstBot1 = []
+# print(lstBot)
+# print(sorted(lstBot))
+# print("----")
+# print(lstBot.sort(reverse=True))
+# print(lstBot)
+
+# print(myBot == myB)
+# print(myBot != myB)
+
+# print(myBot > myB)
+# print(myBot <= myB)
+
+
+
+
 
 
 
@@ -92,7 +120,7 @@ print(myBot <= myB)
 #print(dir(myBot))
 #Bot("ddd").say_hi()
 # print(myBot)
-print("--------------")
+'''print("............")
 
 
 def logged(func):
@@ -124,4 +152,4 @@ def maybe_logged(do_log=True):
             if do_log:
                 print('got result:', result)
             return result
-        return wrapped
+        return wrapped'''
